@@ -23,7 +23,7 @@ Starknet Advantage: ZK proofs for private study data; low fees for daily submiss
 Beginner-Friendly: Focus on basic structs and conditionals; ZK proof can be mocked with a boolean for testing.
 
 
-0) Stack & Prereqs
+# 0) Stack & Prereqs
 Tooling
 
 Cairo 1 compiler (via scarb)
@@ -40,7 +40,7 @@ starknet.js (frontend wallet & contract calls)
 
 Wallets: Argent X or Braavos (testnet)
 
-1) Project Layout
+# 1) Project Layout
 starknet-dapps/
   ├─ event_rsvp/
   │   ├─ Scarb.toml
@@ -57,7 +57,7 @@ starknet-dapps/
       ├─ package.json
       └─ (vite + react + starknet.js)
 
-2) dApp A — Decentralized Event RSVP (with Attendance Proof)
+# 2) dApp A — Decentralized Event RSVP (with Attendance Proof)
 
 Problem
 People RSVP and don’t show up. We take a small refundable deposit when RSVPing. If they prove attendance, they get it back; otherwise, the organizer keeps deposits from no-shows. We’ll mock ZK verification as a boolean/bytes input so you can swap in a real verifier later.
@@ -113,7 +113,7 @@ Flow
 
 CODE SNIPPET -> event_rsvp/src/lib.cairo
 
-3) dApp B — Peer-to-Peer Skill Swap Marketplace
+# 3) dApp B — Peer-to-Peer Skill Swap Marketplace
     Problem
     Two users barter skills (e.g., I teach Python; I want Spanish). Both put a small deposit to prevent ghosting. Funds are released when both confirm completion; otherwise, a timeout lets either party claim their deposit back or resolve.
 
@@ -147,7 +147,7 @@ CODE SNIPPET -> event_rsvp/src/lib.cairo
     
 CODE SNIPPET -> skill_swap/src/skill_swap.cairo
 
-4) Local Build, Test, Deploy
+# 4) Local Build, Test, Deploy
     Build
     cd event_rsvp && scarb build
     cd ../skill_swap && scarb build
@@ -162,11 +162,11 @@ CODE SNIPPET -> skill_swap/src/skill_swap.cairo
         sncast --profile devnet deploy --class-hash <hash> --constructor-calldata ""
         For testnet, configure ~/.snfoundry profile with RPC + account.
 
-5) Frontend Integration (React + starknet.js)
+# 5) Frontend Integration (React + starknet.js)
     Install: npm i starknet @argent/get-starknet
     Connect & call: CHECK CODE SNIPPET -> frontend/
 
-6) Security & Gas Considerations
+# 6) Security & Gas Considerations
     No unbounded loops over large sets; use batched operations.
     Check-effects-interactions: update storage before external calls.
     Token safety: handle ERC20 return values; consider known OZ ERC20.
@@ -174,16 +174,16 @@ CODE SNIPPET -> skill_swap/src/skill_swap.cairo
     Input validation: non-zero deposits, valid addresses.
     Upgradability (optional): proxy pattern if you need contract upgrades.
 
-7) What to Swap Later for Production
+# 7) What to Swap Later for Production
     Replace mock proof with a real verifier (pass verifier contract address; store event’s public inputs; verify proof on-chain).
     Add batch_refund(event_id, attendees[]) for RSVP finalization.
     Add timeouts & dispute resolution in Skill Swap.
     Add indexer (e.g., Apibara, Dojo indexer) to query events & swaps for the UI.
 
-8) Quick Demo Commands (Devnet)
+# 8) Quick Demo Commands (Devnet)
     1. Deploy an ERC20 test token (or use an existing devnet token).
     2. Mint to users and approve the dApp contracts:
-        # Using sncast to call ERC20 approve
+         Using sncast to call ERC20 approve
         sncast --profile devnet invoke \
         --contract-address <ERC20> \
         --function approve \
@@ -198,12 +198,12 @@ CODE SNIPPET -> skill_swap/src/skill_swap.cairo
     4. RSVP (after approve):
         sncast invoke --contract-address <EVENT_RSVP_ADDR> --function rsvp --calldata <EVENT_ID>
     5.  Submit Proof:
-        # pass "OK" bytes — in practice encode via abi-friendly method
+         pass "OK" bytes — in practice encode via abi-friendly method
     6. Finalize (organizer):
         sncast invoke --contract-address <EVENT_RSVP_ADDR> --function finalize_event --calldata <EVENT_ID>
 
 
-TL;DR or Summary
+# TL;DR or Summary
     Event RSVP: organizer sets deposit; users RSVP by ERC20 deposit; submit mock ZK proof (“OK”) to mark attendance; finalize & refund/forfeit with batched calls.
 
     Skill Swap: list skills; both parties deposit via propose_swap; both confirm; settle refunds both deposits; extend with timeouts/disputes later.
