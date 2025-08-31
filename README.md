@@ -1,4 +1,4 @@
-A simple Guide to build two starknet project:
+# A simple Guide to build two starknet project:
 
 ✅ Decentralized Event RSVP with Attendance Proof (ZK-friendly)
 
